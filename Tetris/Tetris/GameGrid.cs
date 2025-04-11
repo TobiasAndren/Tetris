@@ -3,8 +3,8 @@ namespace Tetris;
 public class GameGrid
 {
     private readonly int[,] _grid;
-    private int Rows { get; }
-    private int Columns { get; }
+    public int Rows { get; }
+    public int Columns { get; }
 
     public int this[int row, int col]
     {

@@ -1,2 +1,9 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using Tetris;
+
+GameMenu gameMenu = new GameMenu();
+gameMenu.ShowStartMenu();
+
+var gameState = new GameState();
+
+gameState.GameLoop();
+
