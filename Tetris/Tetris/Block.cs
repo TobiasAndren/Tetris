@@ -6,49 +6,49 @@ public abstract class Block
     protected abstract Position StartOffset { get; }
     public abstract int Id { get; }
 
-    private int rotationState;
-    private Position offset;
+    private int _rotationState;
+    private readonly Position _offset;
 
-    public Block()
+    protected Block()
     {
-        offset = new Position(StartOffset.Row, StartOffset.Column);
+        _offset = new Position(StartOffset.Row, StartOffset.Column);
     }
 
     public IEnumerable<Position> TilePositions()
     {
-        foreach (Position p in Tiles[rotationState])
+        foreach (Position p in Tiles[_rotationState])
         {
-            yield return new Position(p.Row + offset.Row, p.Column + offset.Column);
+            yield return new Position(p.Row + _offset.Row, p.Column + _offset.Column);
         }
     }
 
     public void RotateClockwise()
     {
-        rotationState = (rotationState + 1) % Tiles.Length;
+        _rotationState = (_rotationState + 1) % Tiles.Length;
     }
 
     public void RotateCounterCLockwise()
     {
-        if (rotationState == 0)
+        if (_rotationState == 0)
         {
-            rotationState = Tiles.Length - 1;
+            _rotationState = Tiles.Length - 1;
         }
         else
         {
-            rotationState--;
+            _rotationState--;
         }
     }
 
     public void Move(int rows, int columns)
     {
-        offset.Row += rows;
-        offset.Column += columns;
+        _offset.Row += rows;
+        _offset.Column += columns;
     }
 
     public void Reset()
     {
-        rotationState = 0;
-        offset.Row = StartOffset.Row;
-        offset.Column = StartOffset.Column;
+        _rotationState = 0;
+        _offset.Row = StartOffset.Row;
+        _offset.Column = StartOffset.Column;
     }
 }

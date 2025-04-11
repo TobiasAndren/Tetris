@@ -2,38 +2,38 @@ namespace Tetris;
 
 public class GameGrid
 {
-    private readonly int[,] grid;
-    public int Rows { get; }
-    public int Columns { get; }
+    private readonly int[,] _grid;
+    private int Rows { get; }
+    private int Columns { get; }
 
     public int this[int row, int col]
     {
-        get => grid[row, col];
-        set => grid[row, col] = value;
+        get => _grid[row, col];
+        set => _grid[row, col] = value;
     }
 
     public GameGrid(int rows, int columns)
     {
         Rows = rows;
         Columns = columns;
-        grid = new int[Rows, Columns];
+        _grid = new int[Rows, Columns];
     }
 
-    public bool IsInside(int row, int col)
+    private bool IsInside(int row, int col)
     {
         return row >= 0 && row < Rows && col >= 0 && col < Columns;
     }
 
-    public bool isEmpty(int row, int col)
+    public bool IsEmpty(int row, int col)
     {
-        return IsInside(row, col) && grid[row, col] == 0;
+        return IsInside(row, col) && _grid[row, col] == 0;
     }
 
-    public bool IsRowFull(int row)
+    private bool IsRowFull(int row)
     {
-        for (int col = 0; col < Columns; col++)
+        for (var col = 0; col < Columns; col++)
         {
-            if (grid[row, col] == 0)
+            if (_grid[row, col] == 0)
             {
                 return false;
             }
@@ -44,9 +44,9 @@ public class GameGrid
 
     public bool IsRowEmpty(int row)
     {
-        for (int col = 0; col < Columns; col++)
+        for (var col = 0; col < Columns; col++)
         {
-            if (grid[row, col] != 0)
+            if (_grid[row, col] != 0)
             {
                 return false;
             }
@@ -57,26 +57,26 @@ public class GameGrid
 
     private void ClearRow(int row)
     {
-        for (int col = 0; col < Columns; col++)
+        for (var col = 0; col < Columns; col++)
         {
-            grid[row, col] = 0;
+            _grid[row, col] = 0;
         }
     }
 
     private void MoveRowDown(int row, int numRows)
     {
-        for (int col = 0; col < Columns; col++)
+        for (var col = 0; col < Columns; col++)
         {
-            grid[row + numRows, col] = grid[row, col];
-            grid[row, col] = 0;
+            _grid[row + numRows, col] = _grid[row, col];
+            _grid[row, col] = 0;
         }
     }
 
     public int ClearFullRow()
     {
-        int cleared = 0;
+        var cleared = 0;
 
-        for (int row = Rows - 1; row >= 0; row--)
+        for (var row = Rows - 1; row >= 0; row--)
         {
             if (IsRowFull(row))
             {
