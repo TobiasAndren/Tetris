@@ -3,6 +3,8 @@ namespace Tetris;
 public class GameState
 {
     private Block currentBlock;
+
+    private bool isPaused = false;
     public int Score { get; private set; } = 0;
 
     public Block CurrentBlock
@@ -136,10 +138,9 @@ public class GameState
     public void Render()
     {
         Console.Clear();
-
-
+        
+        _drawGame.DrawUi(GameGrid, Score, BlockQueue.NextBlock, false, GameOver, isPaused);
         _drawGame.DrawBoard(GameGrid);
-        _drawGame.DrawUi(GameGrid, Score, BlockQueue.NextBlock, false, GameOver);
         
         for (int row = 0; row < GameGrid.Rows; row++)
         {
@@ -166,6 +167,16 @@ public class GameState
         {
             var key = Console.ReadKey(true).Key;
 
+            if (isPaused)
+            {
+                if (key == ConsoleKey.P)
+                {
+                    isPaused = false;
+                }
+                
+                return;
+            }
+
             switch (key)
             {
                 case ConsoleKey.UpArrow:
@@ -186,6 +197,9 @@ public class GameState
                 case ConsoleKey.Escape:
                     GameOver = true;
                     break;
+                case ConsoleKey.P:
+                    isPaused = true;
+                    break;
             }
         }
     }
@@ -193,7 +207,7 @@ public class GameState
     public void GameLoop()
     {
         Console.Clear();
-        _drawGame.DrawUi(GameGrid, Score, BlockQueue.NextBlock, true, GameOver);
+        _drawGame.DrawUi(GameGrid, Score, BlockQueue.NextBlock, true, GameOver, isPaused);
 
         while (Console.KeyAvailable)
         {
@@ -207,7 +221,10 @@ public class GameState
         while (!GameOver)
         {
             HandleInput();
-            MoveBlockDown();
+            if (!isPaused)
+            {
+                MoveBlockDown();
+            }
             Render();
             Thread.Sleep(250);
         }

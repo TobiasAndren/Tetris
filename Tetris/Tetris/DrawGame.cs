@@ -2,7 +2,7 @@ namespace Tetris;
 
 public class DrawGame
 {
-    public void DrawUi(GameGrid gameGrid, int score, Block nextBlock, bool isWaitingToStart, bool gameOver)
+    public void DrawUi(GameGrid gameGrid, int score, Block nextBlock, bool isWaitingToStart, bool gameOver, bool isPaused)
     {
         var uiColumn = gameGrid.Columns * 4 + 2;
         var row = 0;
@@ -41,6 +41,15 @@ public class DrawGame
         {
             Console.SetCursorPosition(uiColumn, row++);
             Console.WriteLine("Press 'enter' to start the game...");
+        }
+
+        if (isPaused)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.SetCursorPosition(uiColumn, row++);
+            Console.WriteLine("              PAUSED              ");
+            Console.SetCursorPosition(uiColumn, row++);
+            Console.WriteLine("        Press 'p' to resume         ");
         }
         
         Console.ResetColor();
