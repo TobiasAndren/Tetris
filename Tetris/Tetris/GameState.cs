@@ -139,7 +139,7 @@ public class GameState
 
 
         _drawGame.DrawBoard(GameGrid);
-        _drawGame.DrawUi(GameGrid, Score, BlockQueue.NextBlock, false);
+        _drawGame.DrawUi(GameGrid, Score, BlockQueue.NextBlock, false, GameOver);
         
         for (int row = 0; row < GameGrid.Rows; row++)
         {
@@ -193,7 +193,7 @@ public class GameState
     public void GameLoop()
     {
         Console.Clear();
-        _drawGame.DrawUi(GameGrid, Score, BlockQueue.NextBlock, true);
+        _drawGame.DrawUi(GameGrid, Score, BlockQueue.NextBlock, true, GameOver);
 
         while (Console.KeyAvailable)
         {
@@ -207,10 +207,35 @@ public class GameState
         while (!GameOver)
         {
             HandleInput();
-            //MoveBlockDown();
+            MoveBlockDown();
             Render();
             Thread.Sleep(250);
         }
-        Console.WriteLine("Game Over!");
+        
+        _drawGame.DrawGameOver(GameGrid.Columns, GameGrid.Rows);
+        
+        while (true)
+        {
+            var key = Console.ReadKey(true).Key;
+
+            if (key == ConsoleKey.Enter)
+            {
+                Restart();
+                break;
+            }
+            else if (key == ConsoleKey.Escape)
+            {
+                Environment.Exit(0);
+            }
+        }
+    }
+
+    private void Restart()
+    {
+        Console.Clear();
+
+        var newGame = new GameState();
+        
+        newGame.GameLoop();
     }
 }

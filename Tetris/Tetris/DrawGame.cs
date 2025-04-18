@@ -2,31 +2,32 @@ namespace Tetris;
 
 public class DrawGame
 {
-    public void DrawUi(GameGrid gameGrid, int score, Block nextBlock, bool isWaitingToStart)
+    public void DrawUi(GameGrid gameGrid, int score, Block nextBlock, bool isWaitingToStart, bool gameOver)
     {
         var uiColumn = gameGrid.Columns * 4 + 2;
         var row = 0;
 
         Console.SetCursorPosition(uiColumn, row++);
         Console.ForegroundColor = ConsoleColor.Magenta;
-        Console.WriteLine("========================");
+        Console.WriteLine("===================================");
         Console.SetCursorPosition(uiColumn, row++);
-        Console.WriteLine("         TETRIS         ");
+        Console.WriteLine("              TETRIS              ");
 
         if (!isWaitingToStart)
         {
             Console.SetCursorPosition(uiColumn, row++);
-            Console.WriteLine("------------------------");
+            Console.WriteLine("-----------------------------------");
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.SetCursorPosition(uiColumn, row++);
-            Console.WriteLine($"        Score: {score}     ");
+            Console.WriteLine($"            Score: {score}         ");
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.SetCursorPosition(uiColumn, row++);
-            Console.WriteLine("------------------------");
+            Console.WriteLine("-----------------------------------");
+
 
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.SetCursorPosition(uiColumn, row++);
-            Console.WriteLine("       Next Block:         ");
+            Console.WriteLine("            Next Block:            ");
             
             DrawNextBlock(nextBlock, 5, gameGrid.Columns - 1);
         }
@@ -34,7 +35,7 @@ public class DrawGame
         Console.WriteLine("");
         Console.SetCursorPosition(uiColumn, row++);
         Console.ForegroundColor = ConsoleColor.Magenta;
-        Console.WriteLine("========================");
+        Console.WriteLine("===================================");
 
         if (isWaitingToStart)
         {
@@ -43,6 +44,22 @@ public class DrawGame
         }
         
         Console.ResetColor();
+    }
+
+    public void DrawGameOver(int gridCols, int gridRows)
+    {
+        var uiStartCol = gridCols * 4 - 2;
+        var centerRow = gridRows / 1;
+        
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.SetCursorPosition(uiStartCol, centerRow);
+        Console.WriteLine("                 GAME OVER                ");
+        
+        Console.SetCursorPosition(uiStartCol - 2, centerRow + 2);
+        Console.WriteLine("      Press 'enter' to restart the game...    ");
+        
+        Console.SetCursorPosition(uiStartCol - 2, centerRow + 4);
+        Console.WriteLine("      Press 'esc' to exit the game...    ");
     }
     
     public void DrawBlock(int row, int col, ConsoleColor color)
