@@ -91,4 +91,20 @@ public class GameGrid
 
         return cleared;
     }
+
+    private void MoveRowsAboveDown(int startRow)
+    {
+        for (int row = startRow - 1; row >= 0; row--)
+        {
+            for (int col = 0; col < Columns; col++)
+            {
+                _grid[row + 1, col] = _grid[row, col];
+            }
+        }
+
+        for (int col = 0; col < Columns; col++)
+        {
+            _grid[0, col] = 0;
+        }
+    }
 }

@@ -3,6 +3,7 @@ namespace Tetris;
 public class GameState
 {
     private Block currentBlock;
+    public int Score { get; private set; } = 0;
 
     public Block CurrentBlock
     {
@@ -107,7 +108,9 @@ public class GameState
             }
         }
 
-        GameGrid.ClearFullRow();
+        int rowsCleared = GameGrid.ClearFullRow();
+        
+        Score += rowsCleared * 100;
 
         if (IsGameOver())
         {
@@ -134,7 +137,9 @@ public class GameState
     {
         Console.Clear();
 
+
         _drawGame.DrawBoard(GameGrid);
+        _drawGame.DrawUi(GameGrid, Score, BlockQueue.NextBlock, false);
         
         for (int row = 0; row < GameGrid.Rows; row++)
         {
@@ -148,8 +153,6 @@ public class GameState
                 }
             }
         }
-        
-        
         
         foreach (Position pos in CurrentBlock.TilePositions())
         {
@@ -189,13 +192,24 @@ public class GameState
 
     public void GameLoop()
     {
-        Console.WriteLine("Game Loop started...");
+        Console.Clear();
+        _drawGame.DrawUi(GameGrid, Score, BlockQueue.NextBlock, true);
+
+        while (Console.KeyAvailable)
+        {
+            Console.ReadKey(true);
+        }
+
+        while (Console.ReadKey(true).Key != ConsoleKey.Enter)
+        {
+            
+        }
         while (!GameOver)
         {
             HandleInput();
             //MoveBlockDown();
             Render();
-            Thread.Sleep(200);
+            Thread.Sleep(250);
         }
         Console.WriteLine("Game Over!");
     }

@@ -2,6 +2,49 @@ namespace Tetris;
 
 public class DrawGame
 {
+    public void DrawUi(GameGrid gameGrid, int score, Block nextBlock, bool isWaitingToStart)
+    {
+        var uiColumn = gameGrid.Columns * 4 + 2;
+        var row = 0;
+
+        Console.SetCursorPosition(uiColumn, row++);
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine("========================");
+        Console.SetCursorPosition(uiColumn, row++);
+        Console.WriteLine("         TETRIS         ");
+
+        if (!isWaitingToStart)
+        {
+            Console.SetCursorPosition(uiColumn, row++);
+            Console.WriteLine("------------------------");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.SetCursorPosition(uiColumn, row++);
+            Console.WriteLine($"        Score: {score}     ");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.SetCursorPosition(uiColumn, row++);
+            Console.WriteLine("------------------------");
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.SetCursorPosition(uiColumn, row++);
+            Console.WriteLine("       Next Block:         ");
+            
+            DrawNextBlock(nextBlock, 5, gameGrid.Columns - 1);
+        }
+        
+        Console.WriteLine("");
+        Console.SetCursorPosition(uiColumn, row++);
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine("========================");
+
+        if (isWaitingToStart)
+        {
+            Console.SetCursorPosition(uiColumn, row++);
+            Console.WriteLine("Press 'enter' to start the game...");
+        }
+        
+        Console.ResetColor();
+    }
+    
     public void DrawBlock(int row, int col, ConsoleColor color)
     {
         if (row >= 0 && col >= 0 && row < Console.WindowHeight && col < Console.WindowWidth)
@@ -10,10 +53,26 @@ public class DrawGame
             Console.ForegroundColor = color;
             Console.Write("+---+");
             Console.SetCursorPosition(col * 4, row * 2 + 1);
-            Console.Write("|   |"); 
+            Console.Write("|   |");
             Console.SetCursorPosition(col * 4, row * 2 + 2);
             Console.Write("+---+"); 
             Console.ResetColor();
+        }
+    }
+
+    public void DrawNextBlock(Block nextBlock, int offsetRow, int offsetCol)
+    {
+        nextBlock.Reset();
+
+        foreach (Position pos in nextBlock.TilePositions())
+        {
+            var drawRow = offsetRow + pos.Row;
+            var drawCol = offsetCol + pos.Column;
+
+            if (drawRow >= 0 && drawCol >= 0 && drawCol * 4 + 4 < Console.WindowWidth && drawRow * 2 + 2 < Console.WindowHeight)
+            {
+                DrawBlock(drawRow, drawCol, GetColor(nextBlock.Id));
+            }
         }
     }
 

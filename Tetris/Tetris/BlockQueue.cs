@@ -17,7 +17,7 @@ public class BlockQueue
     
     private readonly Random _random = new Random();
     
-    private Block NextBlock {get; set;}
+    public Block NextBlock {get; private set;}
 
     public BlockQueue()
     {
